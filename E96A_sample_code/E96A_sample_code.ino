@@ -3,7 +3,7 @@
 #include "config.h"
 
 // Make sure to download the BasicLinearAlgebra Library from the Library manager
-// Change this value to the number of motors you have
+// Change value in config to the number of motors you have
 Motor_Driver* motor[NUM_MOTORS];
 Thruster_Allocator allocator;
 
@@ -24,34 +24,39 @@ void setup() {
   // 
   // EDIT these matrices, use whatever coordinate system you want but be consistent
   // 
+  // Center of mass relative to origin of robot
   BLA::Matrix<3> COM = {0.0, 0.0, 0.0};
+  // Location of thruster relative to origin of robot
   BLA::Matrix<NUM_MOTORS, 3> thrusterLocations = {156,111,85,
                                                   156,-111,85,
-                                                  -156,111,85,
-                                                  -156,-111,85,
+                                                  // -156,111,85,
+                                                  // -156,-111,85,
                                                   120,218,0,
                                                   120,-218,0,
-                                                  -120,218,0,
-                                                  -120,-218,0,
+                                                  // -120,218,0,
+                                                  // -120,-218,0,
   };
+  // orientation vector of motor relative to origin of robot
   const float deg = 45.0;
   const float s = sin(deg * PI / 180.0);
   const float c = cos(deg * PI / 180.0);
   BLA::Matrix<NUM_MOTORS, 3> thrusterOrientations = {c,-s,0,
                                                     c,s,0,
-                                                    -c,-s,0,
-                                                    -c,s,0,
-                                                    0,0,-1,
+                                                    // -c,-s,0,
+                                                    // -c,s,0,
+                                                    // 0,0,-1,
                                                     0,0,1,
                                                     0,0,1,
-                                                    0,0,-1,
+                                                    // 0,0,-1,
     };
 
   allocator.defineMatrix(COM, thrusterLocations, thrusterOrientations);
 }
 
 void loop() {
-  float control_effort[6] = {1.0, 0.0, 0, 0.0, 0, 0};
+  // Control effort is how much you want to go in a direction (ex: output from joystick)
+  // order is x, y, z, roll, pitch, yaw
+  float control_effort[6] = {0.0, 0.0, 1.0, 0.0, 0, 0};
   allocator.allocate(control_effort, false);
   for(uint8_t i = 0; i < NUM_MOTORS; i++){
     Serial.print(allocator.output[i], 3);

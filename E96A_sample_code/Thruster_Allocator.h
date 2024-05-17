@@ -8,7 +8,7 @@
 class Thruster_Allocator {
 public:
   Thruster_Allocator();
-  void defineMatrix(BLA::Matrix<3> COM, BLA::Matrix<8, 3> thrusterLocations, BLA::Matrix<8, 3> thrusterOrientations);
+  void defineMatrix(BLA::Matrix<3> COM, BLA::Matrix<NUM_MOTORS, 3> thrusterLocations, BLA::Matrix<NUM_MOTORS, 3> thrusterOrientations);
   void allocate(float control_effort[6], bool verbose = false);
   float output[NUM_MOTORS] = {0};
 private:

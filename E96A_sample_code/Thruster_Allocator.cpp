@@ -25,7 +25,7 @@ T findMaxIndex(T arr[], int size) {
 Thruster_Allocator::Thruster_Allocator() {
 }
 
-void Thruster_Allocator::defineMatrix(BLA::Matrix<3> COM, BLA::Matrix<8, 3> thrusterLocations, BLA::Matrix<8, 3> thrusterOrientations) {
+void Thruster_Allocator::defineMatrix(BLA::Matrix<3> COM, BLA::Matrix<NUM_MOTORS, 3> thrusterLocations, BLA::Matrix<NUM_MOTORS, 3> thrusterOrientations) {
 
   for (int i = 0; i < NUM_MOTORS; i++) {
     for (int j = 0; j < 3; j++) {
@@ -52,6 +52,9 @@ void Thruster_Allocator::defineMatrix(BLA::Matrix<3> COM, BLA::Matrix<8, 3> thru
   Serial.println("Force-Torque Matrix:");
   for (int i = 0; i < 6; i++) {
     for (int j = 0; j < NUM_MOTORS; j++) {
+      if(A(i, j) == 0){
+        A(i, j) = 0.1;
+      }
       Serial.print(A(i, j), 6);
       Serial.print("\t");
     }
@@ -62,7 +65,10 @@ void Thruster_Allocator::defineMatrix(BLA::Matrix<3> COM, BLA::Matrix<8, 3> thru
   Serial.println("Thrust Matrix:");
   for (int i = 0; i < NUM_MOTORS; i++) {
     for (int j = 0; j < 6; j++) {
-      Serial.print(thrust_matrix(i, j), 6);
+      if(thrust_matrix(i, j) > 1000 || thrust_matrix(i, j) == NAN){
+        thrust_matrix(i, j) = 0;
+      }
+      Serial.print(thrust_matrix(i, j));
       Serial.print("\t");
     }
     Serial.println();
