@@ -2,19 +2,17 @@
 #define THRUSTER_ALLOCATOR_H
 #include "Arduino.h"
 #include "config.h"
-
 #include "BasicLinearAlgebra.h"
-#include "Geometry.h"
+#define BKWD_FWD_THRUST_RATIO 0.8
 
 class Thruster_Allocator {
 public:
   Thruster_Allocator();
+  void defineMatrix(BLA::Matrix<3> COM, BLA::Matrix<8, 3> thrusterLocations, BLA::Matrix<8, 3> thrusterOrientations);
+  void allocate(float control_effort[6], bool verbose = false);
+  float output[NUM_MOTORS] = {0};
 private:
-  BLA::Matrix<1, 3> COM;
-  BLA::Matrix<MOTOR_COUNT, 3> motor_pos;
-  BLA::Matrix<MOTOR_COUNT, 3> motor_orient;
-
-
+  BLA::Matrix<NUM_MOTORS, 6> thrust_matrix;
 };
 
 #endif
